@@ -70,6 +70,48 @@ def QuantumAnnealing(Hi, Hf, psii, As, Bs, tlist):
     Ht = [[Hi, As], [Hf, Bs]]
       
     args = {'t_max': tlist[-1]} 
-    result = qt.sesolve(H=Ht, psi0=psii, tlist=tlist, args=args)
-    return result.s
+    result = qt.sesolve(H=Ht, psi0=psii, tlist=tlist,  args=args)
+    return result.states 
+
+def GetFidelity(Hi, Hf, psii, psif, As, Bs, tlist):
+    """
+        Return the system states along the interpolation for a given parametrization and a time list    
+        Parameters: 
+            Hi : Initial Hamiltonian (qutip object)
+            Hf : Final Hamiltonian (qutip object)
+            psii : Initial State (qutip object)
+            psif : Expected Final State (qutip object)
+            As : Parametrization function (python function)
+            Bs : Parametrization function (python function)
+            tlist : time list (np.array)
+
+        Return:
+            The evolution fidelity related to psif 
+    """
+    psif_ev = QuantumAnnealing(Hi, Hf, psii, As, Bs, tlist)[-1]
+
+    return np.abs((psif.dag() * psif_ev * psif_ev.dag() * psif)[0][0][0])
+
+def Fidelity_X_tmax(Hi, Hf, psii, psif, As, Bs, tmax_list, tlist_nints):
+    """
+        Return the Fidelity in function of the evolution total time 
+        Parameters: 
+            Hi : Initial Hamiltonian (qutip object)
+            Hf : Final Hamiltonian (qutip object)
+            psii : Initial State (qutip object)
+            psif : Expected Final State (qutip object)
+            As : Parametrization function (python function)
+            Bs : Parametrization function (python function)
+            tmax_list : total time list (np.array)
+            tlist_nints : number of intervals of the evolution time 
+        Return:
+            fidelity : np.array (len(fidelity) == len(tmax_list))
+    """
+    N = len(tmax_list)
+    fidelity = np.zeros(N)
+    for i in range(N):
+        tlist = np.linspace(1, tmax_list[i], tlist_nints)
+        fidelity[i] = GetFidelity(Hi, Hf, psii, psif, As, Bs, tlist) 
+    return fidelity
+
 

@@ -1,14 +1,16 @@
+### Importing Libraries 
 import matplotlib.pyplot as plt
 import dwave_networkx as dnx
 import networkx as nx
 
+### Creating topologies 
 G_chimera = dnx.chimera_graph(3, 3, 4)
 G_pegasus = dnx.pegasus_graph(3)
 pos_chimera = dnx.chimera_layout(G_chimera)
 pos_pegasus = dnx.pegasus_layout(G_pegasus)
 
 
-
+### Plotting 
 fig, ax = plt.subplots(figsize=(6,6))
 nx.draw_networkx_nodes(G_chimera, pos_chimera, node_color='#377eb8', edgecolors='black', node_size=100, ax=ax)
 nx.draw_networkx_edges(G_chimera, pos_chimera, ax=ax)
