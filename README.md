@@ -6,6 +6,7 @@ Also, we present the codes we used to solve the Grover algorithm by using the qu
 
 Ref: 
 [1] Amazon AWS example. 
+
 [2] https://github.com/dwavesystems/dwave-ocean-sdk/blob/992bd58493ec7f74bc8368ff3caf8d8be06d6651/docs/index.rst
 
 
